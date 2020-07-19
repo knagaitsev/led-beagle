@@ -1,7 +1,7 @@
 const WebSocket = require('ws');
 const SerialPort = require('serialport');
 
-const serialport = new SerialPort('/dev/ttyO1');
+const serialport = new SerialPort('/dev/ttyS1');
 
 const init = () => {
   const ws = new WebSocket('ws://192.168.1.2:1880/ws');
