@@ -27,11 +27,9 @@ const init = () => {
 
   ws.on('message', async (data) => {
     for (let i = 0; i < data.length; i++) {
-      serialport.write(data.charAt(i));
       console.log(data.charCodeAt(i));
-
-      await delay(100);
     }
+    serialport.write(data);
   });
 
   ws.on('close', () => {
