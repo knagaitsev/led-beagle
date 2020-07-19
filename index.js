@@ -17,7 +17,7 @@ const delay = (time) => {
 
 const init = () => {
   const prodUrl = config.prodUrl;
-  const devUrl = config.dev;
+  const devUrl = config.devUrl;
 
   let url = prodUrl;
   if (config.dev) {
