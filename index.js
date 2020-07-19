@@ -1,5 +1,11 @@
 const WebSocket = require('ws');
 const SerialPort = require('serialport');
+let config = {};
+try {
+  config = require('./config.json');
+} catch (e) {
+
+}
 
 const serialport = new SerialPort('/dev/ttyS1');
 
@@ -10,7 +16,14 @@ const delay = (time) => {
 };
 
 const init = () => {
-  const ws = new WebSocket('ws://192.168.1.2:1880/ws');
+  const prodUrl = config.prodUrl;
+  const devUrl = config.dev;
+
+  let url = prodUrl;
+  if (config.dev) {
+    url = devUrl;
+  }
+  const ws = new WebSocket(`ws://${url}:9000/ws`);
 
   ws.on('message', async (data) => {
     for (let i = 0; i < data.length; i++) {
