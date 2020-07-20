@@ -1,3 +1,4 @@
+const { exec } = require('child_process');
 const WebSocket = require('ws');
 const SerialPort = require('serialport');
 let config = {};
@@ -7,6 +8,7 @@ try {
 
 }
 
+exec('config-pin P9_24 uart');
 const serialport = new SerialPort('/dev/ttyS1');
 
 const delay = (time) => {
