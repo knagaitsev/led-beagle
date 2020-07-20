@@ -15,14 +15,7 @@ const delay = (time) => {
   });
 };
 
-const init = () => {
-  const prodUrl = config.prodUrl;
-  const devUrl = config.devUrl;
-
-  let url = prodUrl;
-  if (config.dev) {
-    url = devUrl;
-  }
+const init = (url) => {
   const ws = new WebSocket(`ws://${url}:9000/ws`);
 
   ws.on('message', async (data) => {
@@ -34,14 +27,15 @@ const init = () => {
 
   ws.on('close', () => {
     setTimeout(() => {
-      console.log('retrying');
+      // console.log('retrying');
       init();
     }, 1000);
   });
 
   ws.on('error', (e) => {
-    console.log(e);
+    // console.log(e);
   })
 };
 
-init();
+init(config.prodUrl);
+init(config.devUrl);
