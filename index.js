@@ -47,6 +47,7 @@ const init = (url, prod) => {
     if (prod) {
       console.log(e);
     }
+    ws.close();
   });
 };
 
