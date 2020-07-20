@@ -30,7 +30,7 @@ const init = (url) => {
   ws.on('close', () => {
     setTimeout(() => {
       // console.log('retrying');
-      init();
+      init(url);
     }, 1000);
   });
 
