@@ -17,7 +17,7 @@ const delay = (time) => {
   });
 };
 
-const init = (url) => {
+const init = (url, prod) => {
   const ws = new WebSocket(`ws://${url}:9000/ws`);
 
   ws.on('message', async (data) => {
@@ -27,17 +27,28 @@ const init = (url) => {
     serialport.write(data);
   });
 
-  ws.on('close', () => {
-    setTimeout(() => {
+  let timeout;
+  const retry = () => {
+    if (timeout) {
+      clearTimeout(timeout);
+    }
+    timeout = setTimeout(() => {
       // console.log('retrying');
-      init(url);
+      init(url, prod);
     }, 1000);
+  };
+
+  ws.on('close', () => {
+    retry();
   });
 
   ws.on('error', (e) => {
-    // console.log(e);
-  })
+    retry();
+    if (prod) {
+      console.log(e);
+    }
+  });
 };
 
-init(config.prodUrl);
-init(config.devUrl);
+init(config.prodUrl, true);
+init(config.devUrl, false);
