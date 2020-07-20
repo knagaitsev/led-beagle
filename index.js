@@ -20,20 +20,33 @@ const delay = (time) => {
 const init = (url, prod) => {
   const ws = new WebSocket(`ws://${url}:9000/ws`);
 
+  let killTimeout;
+
   ws.on('message', async (data) => {
+    if (data === 'ping') {
+      clearTimeout(killTimeout);
+      return;
+    }
+
     for (let i = 0; i < data.length; i++) {
       console.log(data.charCodeAt(i));
     }
     serialport.write(data);
   });
 
-  let timeout;
+  const pingInterval = setInterval(() => {
+    ws.send('ping');
+    killTimeout = setTimeout(() => {
+      ws.close();
+    }, 10000);
+  }, 20000);
+
+  let retryTimeout;
   const retry = () => {
-    if (timeout) {
-      clearTimeout(timeout);
-    }
-    timeout = setTimeout(() => {
+    clearTimeout(retryTimeout);
+    retryTimeout = setTimeout(() => {
       // console.log('retrying');
+      clearInterval(pingInterval);
       init(url, prod);
     }, 1000);
   };
