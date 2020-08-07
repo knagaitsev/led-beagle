@@ -38,8 +38,8 @@ const init = (url, prod) => {
     ws.send('ping');
     killTimeout = setTimeout(() => {
       ws.close();
-    }, 10000);
-  }, 20000);
+    }, 2000);
+  }, 5000);
 
   let retryTimeout;
   const retry = () => {
